@@ -61,15 +61,24 @@ jobs:
     - name: Terraform validation
       run: terraform validate
 
-    - name: Terraform Apply - Prod
+    - name: Terraform Apply
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       if:  (github.event.inputs.terraform_operation == 'apply'  &&  github.event.inputs.terraformapply == 'true' )
       run: terraform apply -auto-approve -input=false
 
-    - name: Terraform Destroy Plan - Prod
+    - name: Terraform Destroy Plan
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       if:  (github.event.inputs.terraform_operation == 'destroy'  &&  github.event.inputs.terraformapply == 'false' )
       run: terraform plan -destroy
 
-    - name: Terraform Destroy - Prod
+    - name: Terraform Destroy 
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       if:  (github.event.inputs.terraform_operation == 'destroy'  &&  github.event.inputs.terraformapply == 'true' )
       run: terraform destroy --auto-approve  -input=false
 
