@@ -21,12 +21,6 @@ on:
           - plan
           - apply
           - destroy
-      terraformapply:
-        type: choice
-        description: Terraform Apply
-        options:
-          - false
-          - true
 
 jobs:
   terraform:
