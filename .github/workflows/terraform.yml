@@ -4,6 +4,29 @@ on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
+   inputs:
+      environment:
+        type: choice
+        description: Environment
+        options:
+        - Dev
+        - Test
+        - Prod
+      terraform_operation:
+        description: "Terraform operation: plan, apply, destroy"
+        required: true
+        default: "plan"
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+      terraformapply:
+        type: choice
+        description: Terraform Apply
+        options:
+          - false
+          - true
 
 jobs:
   terraform:
@@ -38,8 +61,16 @@ jobs:
     - name: Terraform validation
       run: terraform validate
 
-    - name: Terraform apply
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    - name: Terraform Apply - Prod
+      if:  (github.event.inputs.terraform_operation == 'apply'  &&  github.event.inputs.terraformapply == 'true' )
       run: terraform apply -auto-approve -input=false
+
+    - name: Terraform Destroy Plan - Prod
+      if:  (github.event.inputs.terraform_operation == 'destroy'  &&  github.event.inputs.terraformapply == 'false' )
+      run: terraform plan -destroy
+
+    - name: Terraform Destroy - Prod
+      if:  (github.event.inputs.terraform_operation == 'destroy'  &&  github.event.inputs.terraformapply == 'true' )
+      run: terraform destroy --auto-approve  -input=false
+
+  
