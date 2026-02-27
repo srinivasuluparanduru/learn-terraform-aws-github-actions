@@ -1,33 +1,3 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "6.33.0"
-    }
-  }
-}
-
-provider "aws" {
-}
-
-########################################################
-/*
-// calling ec2 module
-variable "tags_info" {
-  type        = list(string)
-  description = "list of env"
-  default     = ["dev","prod"]
-}
-
-module "srini-ec2"{
-  for_each =  var.tags_info
-    source ="./modules/ec2"
-    instance_type  = var.instance_type
-    tag_Name = each.value
-}
-*/
-
-####################################################
 variable "sg_ports" {
   type        = list(number)
   description = "list of ingress ports"
