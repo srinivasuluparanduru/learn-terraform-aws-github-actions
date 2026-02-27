@@ -17,6 +17,10 @@ jobs:
         shell: bash
 
     steps:
+    
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
